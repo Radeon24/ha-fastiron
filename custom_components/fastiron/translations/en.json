@@ -1,0 +1,36 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configure FastIron Switch",
+        "description": "Enter the connection details for your Ruckus/Brocade ICX switch.",
+        "data": {
+          "host": "IP Address or Hostname",
+          "port": "HTTPS Port",
+          "username": "Username",
+          "password": "Password",
+          "verify_ssl": "Verify SSL Certificate"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to the switch. Check the IP address and ensure the REST API is enabled.",
+      "invalid_auth": "Invalid credentials.",
+      "unknown": "Unexpected error. Check the logs."
+    },
+    "abort": {
+      "already_configured": "This switch is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "FastIron Options",
+        "data": {
+          "scan_interval": "Update Interval (seconds)",
+          "enable_diagnostic_sensors": "Enable diagnostic sensors (packets, errors, discards, FCS)"
+        }
+      }
+    }
+  }
+}
