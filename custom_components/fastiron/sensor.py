@@ -164,7 +164,11 @@ async def async_setup_entry(
     enable_diag: bool = entry.options.get(
         CONF_ENABLE_DIAGNOSTIC_SENSORS, DEFAULT_ENABLE_DIAGNOSTIC_SENSORS
     )
-    entities: list[SensorEntity] = [FastIronTemperatureSensor(coordinator, entry)]
+    entities: list[SensorEntity] = [
+        FastIronTemperatureSensor(coordinator, entry),
+        FastIronPoeTotalSensor(coordinator, entry, "poe_power_w", "PoE consommé total", "mdi:flash"),
+        FastIronPoeTotalSensor(coordinator, entry, "poe_power_allocated_w", "PoE alloué total", "mdi:flash-outline"),
+    ]
     for port_id, port in coordinator.data.items():
         for desc in _PORT_SENSORS:
             if desc.poe_only and not port.poe_capable:
@@ -200,6 +204,40 @@ class FastIronPortSensor(FastIronPortEntity, SensorEntity):
     def native_value(self) -> float | int | None:
         port = self._port
         return self.entity_description.value_fn(port) if port else None
+
+
+class FastIronPoeTotalSensor(CoordinatorEntity[FastIronCoordinator], SensorEntity):
+    """Capteur PoE global : somme de la consommation ou de l'allocation sur tous les ports."""
+
+    _attr_device_class = SensorDeviceClass.POWER
+    _attr_native_unit_of_measurement = UnitOfPower.WATT
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_has_entity_name = True
+
+    def __init__(
+        self,
+        coordinator: FastIronCoordinator,
+        entry: ConfigEntry,
+        attr: str,
+        name: str,
+        icon: str,
+    ) -> None:
+        super().__init__(coordinator)
+        self._attr_name = name
+        self._attr_icon = icon
+        self._poe_attr = attr
+        self._attr_unique_id = f"{entry.entry_id}_poe_{attr}"
+        self._attr_device_info = build_device_info(entry, coordinator)
+
+    @property
+    def native_value(self) -> float | None:
+        ports = self.coordinator.data
+        if not ports:
+            return None
+        return round(
+            sum(getattr(p, self._poe_attr) or 0.0 for p in ports.values() if p.poe_capable),
+            2,
+        )
 
 
 class FastIronTemperatureSensor(CoordinatorEntity[FastIronCoordinator], SensorEntity):
