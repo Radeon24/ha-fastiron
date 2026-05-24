@@ -278,7 +278,7 @@ class FastIronAPI:
             if bare.startswith("power-supply-") and bare.endswith("-status"):
                 idx_s = bare[len("power-supply-"):-len("-status")]
                 if idx_s.isdigit():
-                    text = str(raw).strip()
+                    text = str(raw[0] if isinstance(raw, list) else raw).strip()
                     status.psu.append((int(idx_s), text, "ok" in text.lower()))
         status.psu.sort()
 
@@ -288,7 +288,7 @@ class FastIronAPI:
             if bare.startswith("fan-") and bare.endswith("-status"):
                 idx_s = bare[len("fan-"):-len("-status")]
                 if idx_s.isdigit():
-                    text = str(raw).strip()
+                    text = str(raw[0] if isinstance(raw, list) else raw).strip()
                     status.fans.append((int(idx_s), text, "ok" in text.lower()))
         status.fans.sort()
 
