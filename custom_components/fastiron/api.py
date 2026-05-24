@@ -268,6 +268,8 @@ class FastIronAPI:
         # Température
         temp = comp.get("state", {}).get("temperature", {})
         val = temp.get(f"{_AUG}actual_temperature")
+        if isinstance(val, list):
+            val = val[0] if val else None
         status.temperature = float(val) if val is not None else None
 
         # Alimentations
