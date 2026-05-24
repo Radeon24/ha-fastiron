@@ -48,9 +48,10 @@ class FastIronPortEntity(CoordinatorEntity[FastIronCoordinator]):
         return self.coordinator.data.get(self._port_id)
 
     def _port_label(self) -> str:
-        """Retourne Et<numéro> ou Et<numéro>_<description> si définie (ex: Et1/1/1_Uplink)."""
+        """Retourne '1/1/1' ou '1/1/1 - Description' si définie."""
         port = self._port
         if port:
-            prefix = f"Et{port.short_name}"
-            return f"{prefix}_{port.description}" if port.description else prefix
+            if port.description:
+                return f"{port.short_name} - {port.description}"
+            return port.short_name
         return self._port_id
