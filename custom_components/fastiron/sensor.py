@@ -198,7 +198,7 @@ class FastIronPortSensor(FastIronPortEntity, SensorEntity):
 
     @property
     def name(self) -> str:
-        return f"Port {self._port_label()} {self.entity_description.label}"
+        return f"Port {self._port_label()}"
 
     @property
     def native_value(self) -> float | int | None:

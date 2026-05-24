@@ -41,7 +41,7 @@ class FastIronPortAdminSwitch(FastIronPortEntity, SwitchEntity):
 
     @property
     def name(self) -> str:
-        return f"Port {self._port_label()} activé"
+        return f"Port {self._port_label()}"
 
     @property
     def is_on(self) -> bool | None:
@@ -67,7 +67,7 @@ class FastIronPoESwitch(FastIronPortEntity, SwitchEntity):
 
     @property
     def name(self) -> str:
-        return f"Port {self._port_label()} PoE"
+        return f"Port {self._port_label()}"
 
     @property
     def is_on(self) -> bool | None:

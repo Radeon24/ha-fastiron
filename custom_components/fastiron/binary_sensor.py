@@ -41,7 +41,7 @@ class FastIronLinkSensor(FastIronPortEntity, BinarySensorEntity):
 
     @property
     def name(self) -> str:
-        return f"Port {self._port_label()} liaison"
+        return f"Port {self._port_label()}"
 
     @property
     def is_on(self) -> bool | None:
